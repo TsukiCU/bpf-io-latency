@@ -1,4 +1,4 @@
-/.vscode/
+.vscode/
 /libbpf/
 
 /demo/event/vmlinux.h
