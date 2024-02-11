@@ -1,8 +1,5 @@
 .vscode/
-/libbpf/
-
-/demo/event/vmlinux.h
-/demo/event/*.o
-/demo/event/user
-
-/demo/hw/vmlinux.h
+demo/
+test/
+bpftool/
+blazesym/
