@@ -1,22 +1,18 @@
 [global]
 ioengine=libaio
 direct=1
-size=1g
-runtime=10
-directory=/tmp
+runtime=20s
+time_based
+size=100M
+filename=testfile
 
-[sequential-read]
+[job1]
 stonewall
-rw=read
+rw=randread
 bs=4k
-numjobs=4
-group_reporting
-name=Sequential Read Test
+iodepth=64
 
-[random-write]
-stonewall
+[job2]
 rw=randwrite
 bs=4k
-numjobs=4
-group_reporting
-name=Random Write Test
+iodepth=64
