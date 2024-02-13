@@ -1,4 +1,4 @@
-# IOLatency eBPF Program
+# I/O Latency Measurement eBPF Program
 ## Overview
 This demo is to monitor and measure the latency of block I/O requests in Linux systems, and output a histogram of I/O requests latencies.
 
@@ -72,7 +72,7 @@ It also measures I/O request latencies and presents the results in a histogram f
 
 ### Comparative Testing
 
-The performance were tested following these steps.
+The performance was tested following these steps.
 1. Execute both reference.sh and the iolatency tool in parallel.
 2. While these tools are running, start the test.fio to generate I/O requests.
 3. Record the output of reference.sh in reference_results.txt.
