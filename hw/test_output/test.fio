@@ -1,0 +1,22 @@
+[global]
+ioengine=libaio
+direct=1
+size=1g
+runtime=10
+directory=/tmp
+
+[sequential-read]
+stonewall
+rw=read
+bs=4k
+numjobs=4
+group_reporting
+name=Sequential Read Test
+
+[random-write]
+stonewall
+rw=randwrite
+bs=4k
+numjobs=4
+group_reporting
+name=Random Write Test
