@@ -6,7 +6,7 @@
 #include <linux/errno.h>
 
 char _license[] SEC("license") = "GPL";
-#define MAX_ENTRIES 10240
+#define MAX_ENTRIES 10000
 
 struct {
  __uint(type, BPF_MAP_TYPE_HASH);
@@ -25,27 +25,31 @@ struct {
 
 static struct hist start_hist;
 
-int handle_io_issue(struct request *rq)
-{
-    u64 ts;
+/* Trace Point: block_rq_insert
+ * This trace point is triggered when a block I/O request is INSERTED into the request queue.
 
-    ts = bpf_ktime_get_ns();
-    /* &rq? huh? */
-    bpf_map_update_elem(&start, &rq, &ts, BPF_ANY);
+ * Trace Point: block_rq_issue
+ * This trace point occurs when a block I/O request is issued to the device driver for processing.
 
-    return 0;
-}
+ * Trace Point: block_rq_complete
+ * This trace point is hit upon the COMPLETION of a block I/O request.
+ */
 
 SEC("raw_tracepoint/block_rq_insert")
 int BPF_PROG(bpf_prog_io_insert, struct request *rq) {
-    u64 ts = bpf_ktime_get_ns();
+    u64 ts;
+
+    ts = bpf_ktime_get_ns();
     bpf_map_update_elem(&start, &rq, &ts, BPF_ANY);
     return 0;
 }
 
 SEC("raw_tracepoint/block_rq_issue")
 int BPF_PROG(bpf_prog_io_issue, struct request *rq) {
-    handle_io_issue(rq);
+    u64 ts;
+
+    ts = bpf_ktime_get_ns();
+    bpf_map_update_elem(&start, &rq, &ts, BPF_ANY);
     return 0;
 }
 
@@ -63,7 +67,7 @@ int BPF_PROG(bpf_prog_io_complete, struct request *rq) {
 
     latency = bpf_ktime_get_ns() - *t_start;
     bpf_map_delete_elem(&start, &rq);
-    latency /= 1000U;  // to microseconds
+    latency /= 1000U;  // to usecs
 
     slot = log2l(latency);
     if (slot >= MAX_SLOTS)
