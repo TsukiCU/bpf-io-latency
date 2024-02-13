@@ -1,1 +1,11 @@
-https://eunomia.dev/tutorials/17-biopattern/
+Referenced heavily on:
+https://eunomia.dev/zh/tutorials/17-biopattern/#biopattern
+https://github.com/iovisor/bcc/blob/master/libbpf-tools/trace_helpers.c
+https://elixir.bootlin.com/linux/v6.1.11/source/samples/bpf/cpustat_user.c
+
+
+The following also helped me with understanding:
+https://man7.org/linux/man-pages/man2/bpf.2.html
+https://github.com/iovisor/bcc/blob/master/docs/reference_guide.md#3-bpf_ktime_get_ns
+https://docs.kernel.org/bpf/libbpf/program_types.html
+https://docs.kernel.org/bpf/maps.html

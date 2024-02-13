@@ -2,14 +2,12 @@
 #define _IOLATENCY_H_
 
 #define MAX_SLOTS 20
-#define MAX_COMM_LEN 16
 
-struct hist {
-    __u32 slots[MAX_SLOTS];
-    char comm[MAX_COMM_LEN];
-};
+// don't need this in user space.
+#ifdef __BPF__
 
-static __always_inline u64 log2(u32 v)
+#include "vmlinux.h"
+static u64 log2(u32 v)
 {
 	u32 shift, r;
 
@@ -22,7 +20,7 @@ static __always_inline u64 log2(u32 v)
 	return r;
 }
 
-static __always_inline u64 log2l(u64 v)
+static u64 log2l(u64 v)
 {
 	u32 hi = v >> 32;
 
@@ -32,5 +30,10 @@ static __always_inline u64 log2l(u64 v)
 		return log2(v);
 }
 
+#endif
+
+struct hist {
+    __u32 slots[MAX_SLOTS];
+};
 
 #endif /* _IOLATENCY_H_ */

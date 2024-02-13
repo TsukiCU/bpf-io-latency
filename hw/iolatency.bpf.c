@@ -1,10 +1,9 @@
-#include "vmlinux.h"
+#include "iolatency.h"
+
 #include <bpf/bpf_helpers.h>
 #include <bpf/bpf_core_read.h>
 #include <bpf/bpf_tracing.h>
 #include <linux/errno.h>
-
-#include "iolatency.h"
 
 char _license[] SEC("license") = "GPL";
 #define MAX_ENTRIES 10240
@@ -31,9 +30,16 @@ int handle_io_issue(struct request *rq)
     u64 ts;
 
     ts = bpf_ktime_get_ns();
-    /* &rq? */
+    /* &rq? huh? */
     bpf_map_update_elem(&start, &rq, &ts, BPF_ANY);
 
+    return 0;
+}
+
+SEC("raw_tracepoint/block_rq_insert")
+int BPF_PROG(bpf_prog_io_insert, struct request *rq) {
+    u64 ts = bpf_ktime_get_ns();
+    bpf_map_update_elem(&start, &rq, &ts, BPF_ANY);
     return 0;
 }
 
