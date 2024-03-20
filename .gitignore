@@ -1,5 +1,2 @@
-.vscode/
-demo/
-test/
-bpftool/
-blazesym/
+*.o
+iolatency
